@@ -1,5 +1,12 @@
 {
-    "version": 1.0 ,
-    "description": "Odin4 CI Flasher for Linux",
-    "build": null
+    "odin4":{
+        "file-name": "odin4",
+        "version": 1.0,
+        "repo-location": "bin/amd64/samsung/flash/"
+    },
+    "odin4.deb":{
+        "file-name": "din4.deb",
+        "version": 1.0,
+        "repo-location": "bin/amd64/samsung/flash/"
+    }
 }
