@@ -1,0 +1,39 @@
+diff --git a/kernel/feature/selinux_hide.c b/kernel/feature/selinux_hide.c
+index d342d42a..38488019 100644
+--- a/kernel/feature/selinux_hide.c
++++ b/kernel/feature/selinux_hide.c
+@@ -77,6 +77,11 @@ static __always_inline int ksu_hide_setprocattr_inline(const char *name, void *v
+ 	return 0;
+ }
+ 
++int ksu_hide_setprocattr(const char *name, void *value, size_t size)
++{
++	return ksu_hide_setprocattr_inline(name, value, size);
++}
++
+ // selinux_transaction_write hijack
+ static ssize_t (*selinux_transaction_write_fn)(struct file *file, const char __user *buf, size_t size, loff_t *pos) __read_mostly = nullptr;
+ static __nocfi ssize_t ksu_selinux_transaction_write(struct file *file, const char __user *buf, size_t size, loff_t *pos)
+@@ -374,4 +379,3 @@ void __exit ksu_selinux_hide_exit()
+ {
+ 	ksu_unregister_feature_handler(KSU_FEATURE_SELINUX_HIDE);
+ }
+-
+diff --git a/kernel/hook/lsm_hooks_manual.c b/kernel/hook/lsm_hooks_manual.c
+index 03666b9e..63cc69cf 100644
+--- a/kernel/hook/lsm_hooks_manual.c
++++ b/kernel/hook/lsm_hooks_manual.c
+@@ -50,13 +50,6 @@ int ksu_file_permission(struct file *file, int mask)
+ 	return 0;
+ }
+ 
+-// NOTE: 3-args only. arg1 not used on some kernels.
+-int ksu_hide_setprocattr(const char *name, void *value, size_t size)
+-{
+-	ksu_hide_setprocattr_inline(name, value, size);
+-	return 0;
+-}
+-
+ static void __init ksu_core_init(void)
+ {
+ 	pr_info("%s: Automated LSM hooking disabled. Make sure manual security hooks are implemented!\n", __func__);
